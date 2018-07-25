@@ -1,0 +1,1037 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Dubbo,Java,RPC," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Asion Lu's Blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/img/favicon.png?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Dubbo源码解剖（一）架构概览与调试环境准备居然你已经开始读源码，默认你已经有了开发基础，有些基础我们不会再说明。这一节我们预热，做一些准备工作。要盖高楼大厦，总得做备好工具，画好蓝图；随便拿几张草稿纸，拿着砖刀，就想搞高楼，那是妄想。 使用到的工具 JDK 1.8.x Maven 3.3.x Git IntelliJ IDEA Zookeeper ……工具的下载、安装、配置不是我们这里的重点，">
+<meta name="keywords" content="Dubbo,Java,RPC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dubbo源码解剖（一）架构概览与调试环境准备">
+<meta property="og:url" content="http://seekheap.com/posts/dubbo/dubbo-src-01-overview-and-debug-environment.html">
+<meta property="og:site_name" content="Asion Lu&#39;s Blog">
+<meta property="og:description" content="Dubbo源码解剖（一）架构概览与调试环境准备居然你已经开始读源码，默认你已经有了开发基础，有些基础我们不会再说明。这一节我们预热，做一些准备工作。要盖高楼大厦，总得做备好工具，画好蓝图；随便拿几张草稿纸，拿着砖刀，就想搞高楼，那是妄想。 使用到的工具 JDK 1.8.x Maven 3.3.x Git IntelliJ IDEA Zookeeper ……工具的下载、安装、配置不是我们这里的重点，">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://seekheap.com/assets/img/dubbo/dubbo-architecture.png">
+<meta property="og:image" content="http://seekheap.com/assets/img/dubbo/dubbo-init.png">
+<meta property="og:image" content="http://seekheap.com/assets/img/dubbo/dubbo-demo.png">
+<meta property="og:image" content="http://seekheap.com/assets/img/dubbo/dubbo-demo-provider-properties.png">
+<meta property="og:image" content="http://seekheap.com/assets/img/dubbo/dubbo-demo-provider-xml.png">
+<meta property="og:image" content="http://seekheap.com/assets/img/dubbo/dubbo-demo-consumer-properties.png">
+<meta property="og:image" content="http://seekheap.com/assets/img/dubbo/dubbo-demo-consumer-xml.png">
+<meta property="og:updated_time" content="2018-07-25T11:00:51.660Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dubbo源码解剖（一）架构概览与调试环境准备">
+<meta name="twitter:description" content="Dubbo源码解剖（一）架构概览与调试环境准备居然你已经开始读源码，默认你已经有了开发基础，有些基础我们不会再说明。这一节我们预热，做一些准备工作。要盖高楼大厦，总得做备好工具，画好蓝图；随便拿几张草稿纸，拿着砖刀，就想搞高楼，那是妄想。 使用到的工具 JDK 1.8.x Maven 3.3.x Git IntelliJ IDEA Zookeeper ……工具的下载、安装、配置不是我们这里的重点，">
+<meta name="twitter:image" content="http://seekheap.com/assets/img/dubbo/dubbo-architecture.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://seekheap.com/posts/dubbo/dubbo-src-01-overview-and-debug-environment.html"/>
+
+
+
+
+
+  <title> Dubbo源码解剖（一）架构概览与调试环境准备 | Asion Lu's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Asion Lu's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">A little bit.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Blog
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-java">
+          <a href="/categories/java" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-cloud"></i> <br />
+            
+            Java
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-life">
+          <a href="/categories/life" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-paint-brush"></i> <br />
+            
+            生活
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://seekheap.com/posts/dubbo/dubbo-src-01-overview-and-debug-environment.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Asion Lu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/img/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Asion Lu's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Dubbo源码解剖（一）架构概览与调试环境准备
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-26T18:26:23+08:00">
+                2018-04-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/posts/dubbo/dubbo-src-01-overview-and-debug-environment.html" class="leancloud_visitors" data-flag-title="Dubbo源码解剖（一）架构概览与调试环境准备">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Dubbo源码解剖（一）架构概览与调试环境准备"><a href="#Dubbo源码解剖（一）架构概览与调试环境准备" class="headerlink" title="Dubbo源码解剖（一）架构概览与调试环境准备"></a>Dubbo源码解剖（一）架构概览与调试环境准备</h1><p>居然你已经开始读源码，默认你已经有了开发基础，有些基础我们不会再说明。这一节我们预热，做一些准备工作。要盖高楼大厦，总得做备好工具，画好蓝图；随便拿几张草稿纸，拿着砖刀，就想搞高楼，那是妄想。</p>
+<h3 id="使用到的工具"><a href="#使用到的工具" class="headerlink" title="使用到的工具"></a>使用到的工具</h3><ul>
+<li>JDK 1.8.x</li>
+<li>Maven 3.3.x</li>
+<li>Git</li>
+<li>IntelliJ IDEA</li>
+<li>Zookeeper</li>
+<li>……<br>工具的下载、安装、配置不是我们这里的重点，如果这些还不能自理的，请先绕道吧。</li>
+</ul>
+<h3 id="获取源码"><a href="#获取源码" class="headerlink" title="获取源码"></a>获取源码</h3><p>要读源码首先要获取源码</p>
+<ul>
+<li><p>简单说明如何获取源码<br>截止成文，Dubbo已经在apache中进行再次孵化，网站为：<a href="http://dubbo.apache.org/" target="_blank" rel="external">http://dubbo.apache.org/</a><br>找到github网址: <a href="https://github.com/apache/incubator-dubbo" target="_blank" rel="external">https://github.com/apache/incubator-dubbo</a><br>我们可以直接：</p>
+<p>  git clone <a href="https://github.com/apache/incubator-dubbo.git" target="_blank" rel="external">https://github.com/apache/incubator-dubbo.git</a><br>  或<br>  git clone <a href="mailto:git@github.com" target="_blank" rel="external">git@github.com</a>:apache/incubator-dubbo.git</p>
+</li>
+<li><p>但是还是建议，先fork之后，在clone下来，应为这样我们就有一个自己的干净的阅读源码的工程，可以在fork的源码中注意些笔记和标注。</p>
+</li>
+</ul>
+<p>Dubboz在成文时最新的release版本为：2.6.1，我们该系列文章是基于2.6.x版本来学习。</p>
+<p>项目克隆完后，导入到 IntelliJ IDEA 中，第一次导入需要些时间，等待maven下载依赖和编译。<br>这里使用的2.6.x版本，项目中有以下子项目。</p>
+<h3 id="架构简介"><a href="#架构简介" class="headerlink" title="架构简介"></a>架构简介</h3><p>导入成功后我们首先运行demo验证环境是否配置正确，项目是否可以运行成功，这样才能保证我们可以阅读调试源码。<br>运行demo之前我们先来看看官方提供的简单架构图：<br><img src="http://seekheap.com/assets/img/dubbo/dubbo-architecture.png" alt="dubbo-architecture"></p>
+<p>对图中的组件简单的说明：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">组件</th>
+<th style="text-align:left">角色说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Registry</td>
+<td style="text-align:left">服务的注册中心，为服务提供注册与发现</td>
+</tr>
+<tr>
+<td style="text-align:left">Monitor</td>
+<td style="text-align:left">服务监视器，统计服务调用次数和调用时间等</td>
+</tr>
+<tr>
+<td style="text-align:left">Provider</td>
+<td style="text-align:left">服务提供方，暴露出服务给调用方</td>
+</tr>
+<tr>
+<td style="text-align:left">Consumer</td>
+<td style="text-align:left">服务消费者，调用远程服务或本地服务</td>
+</tr>
+<tr>
+<td style="text-align:left">Container</td>
+<td style="text-align:left">服务容器，服务运行的环境</td>
+</tr>
+</tbody>
+</table>
+<p>启动顺序</p>
+<ol>
+<li>服务容器负责启动，加载，运行服务提供者。</li>
+<li>服务提供者在启动时，向注册中心注册自己提供的服务。</li>
+<li>服务消费者在启动时，向注册中心订阅自己所需的服务。</li>
+<li>注册中心返回服务提供者地址列表给消费者，如果有变更，注册中心将基于长连接推送变更数据给消费者。</li>
+<li>服务消费者，从提供者地址列表中，基于软负载均衡算法，选一台提供者进行调用，如果调用失败，再选另一台调用。</li>
+<li>服务消费者和提供者，在内存中累计调用次数和调用时间，定时每分钟发送一次统计数据到监控中心。</li>
+</ol>
+<p>如下图：<br><img src="http://seekheap.com/assets/img/dubbo/dubbo-init.png" alt="start sequence"></p>
+<h3 id="运行例子程序"><a href="#运行例子程序" class="headerlink" title="运行例子程序"></a>运行例子程序</h3><h4 id="找到demo子项目"><a href="#找到demo子项目" class="headerlink" title="找到demo子项目"></a>找到demo子项目</h4><p><img src="../../assets/img/dubbo/dubbo-demo.png" alt="dubbo-demo"><br>里面有三个子项目，简单说明一下：</p>
+<ul>
+<li>dubbo-demo-api 提供服务接口项目</li>
+<li>dubbo-demo-consumer 服务消费者</li>
+<li>dubbo-demo-provider 服务提供者</li>
+</ul>
+<h4 id="运行Provider"><a href="#运行Provider" class="headerlink" title="运行Provider"></a>运行Provider</h4><ol>
+<li>我们需要启动Zookeeper</li>
+<li>配置Provider的dubbo.properties<br><img src="../../assets/img/dubbo/dubbo-demo-provider-properties.png" alt="dubbo-demo-provider-properties"></li>
+<li>配置dubbo-demo-provider.xml<br><img src="../../assets/img/dubbo/dubbo-demo-provider-xml.png" alt="dubbo-demo-provider-xml"></li>
+<li>找到DemoProvider，run or debug<br>如果顺利，你最终会在console看到：“Dubbo service server started!”<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[27/04/18 09:49:53:053 CST] main-SendThread()  INFO zookeeper.ClientCnxn: Opening socket connection to server /127.0.0.1:2181</span><br><span class="line">[27/04/18 09:49:53:053 CST] main-SendThread(localhost:2181)  INFO zookeeper.ClientCnxn: Socket connection established to localhost/127.0.0.1:2181, initiating session</span><br><span class="line">[27/04/18 09:49:53:053 CST] main-SendThread(localhost:2181)  INFO zookeeper.ClientCnxn: Session establishment complete on server localhost/127.0.0.1:2181, sessionid = 0x100000078590005, negotiated timeout = 30000</span><br><span class="line">[27/04/18 09:49:53:053 CST] main-EventThread  INFO zkclient.ZkClient: zookeeper state changed (SyncConnected)</span><br><span class="line">[27/04/18 09:49:53:053 CST] main  INFO zookeeper.ZookeeperRegistry:  [DUBBO] Register: dubbo://192.168.10.44:20880/com.alibaba.dubbo.demo.DemoService?anyhost=true&amp;application=demo-provider&amp;dubbo=2.0.0&amp;generic=false&amp;interface=com.alibaba.dubbo.demo.DemoService&amp;loadbalance=roundrobin&amp;methods=sayHello&amp;owner=william&amp;pid=34925&amp;side=provider&amp;timestamp=1524793792543, dubbo version: 2.0.0, current host: 127.0.0.1</span><br><span class="line">[27/04/18 09:49:53:053 CST] main  INFO zookeeper.ZookeeperRegistry:  [DUBBO] Subscribe: provider://192.168.10.44:20880/com.alibaba.dubbo.demo.DemoService?anyhost=true&amp;application=demo-provider&amp;category=configurators&amp;check=false&amp;dubbo=2.0.0&amp;generic=false&amp;interface=com.alibaba.dubbo.demo.DemoService&amp;loadbalance=roundrobin&amp;methods=sayHello&amp;owner=william&amp;pid=34925&amp;side=provider&amp;timestamp=1524793792543, dubbo version: 2.0.0, current host: 127.0.0.1</span><br><span class="line">[27/04/18 09:49:53:053 CST] main  INFO zookeeper.ZookeeperRegistry:  [DUBBO] Notify urls for subscribe url provider://192.168.10.44:20880/com.alibaba.dubbo.demo.DemoService?anyhost=true&amp;application=demo-provider&amp;category=configurators&amp;check=false&amp;dubbo=2.0.0&amp;generic=false&amp;interface=com.alibaba.dubbo.demo.DemoService&amp;loadbalance=roundrobin&amp;methods=sayHello&amp;owner=william&amp;pid=34925&amp;side=provider&amp;timestamp=1524793792543, urls: [empty://192.168.10.44:20880/com.alibaba.dubbo.demo.DemoService?anyhost=true&amp;application=demo-provider&amp;category=configurators&amp;check=false&amp;dubbo=2.0.0&amp;generic=false&amp;interface=com.alibaba.dubbo.demo.DemoService&amp;loadbalance=roundrobin&amp;methods=sayHello&amp;owner=william&amp;pid=34925&amp;side=provider&amp;timestamp=1524793792543], dubbo version: 2.0.0, current host: 127.0.0.1</span><br><span class="line">[27/04/18 09:49:53:053 CST] main  INFO container.Main:  [DUBBO] Dubbo SpringContainer started!, dubbo version: 2.0.0, current host: 127.0.0.1</span><br><span class="line">[2018-04-27 09:49:53] Dubbo service server started!</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="启动完Provider，接下来启动Consumer"><a href="#启动完Provider，接下来启动Consumer" class="headerlink" title="启动完Provider，接下来启动Consumer"></a>启动完Provider，接下来启动Consumer</h4><ol>
+<li>配置Consumer的dubbo.properties<br><img src="../../assets/img/dubbo/dubbo-demo-consumer-properties.png" alt="dubbo-demo-consumer-properties"></li>
+<li>配置dubbo-demo-consumer.xml<br><img src="../../assets/img/dubbo/dubbo-demo-consumer-xml.png" alt="dubbo-demo-consumer-xml"></li>
+<li>找到DemoConsumer，run or debug<br>如果顺利，你最终会在console看到：</li>
+</ol>
+<p>Consumer端的console会打印出：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[27/04/18 09:54:05:005 CST] main  INFO zookeeper.ZookeeperRegistry:  [DUBBO] Register: consumer://192.168.10.44/com.alibaba.dubbo.demo.DemoService?application=demo-consumer&amp;category=consumers&amp;check=false&amp;dubbo=2.0.0&amp;interface=com.alibaba.dubbo.demo.DemoService&amp;methods=sayHello&amp;pid=35044&amp;side=consumer&amp;timestamp=1524794044782, dubbo version: 2.0.0, current host: 192.168.10.44</span><br><span class="line">[27/04/18 09:54:05:005 CST] main  INFO zookeeper.ZookeeperRegistry:  [DUBBO] Subscribe: consumer://192.168.10.44/com.alibaba.dubbo.demo.DemoService?application=demo-consumer&amp;category=providers,configurators,routers&amp;check=false&amp;dubbo=2.0.0&amp;interface=com.alibaba.dubbo.demo.DemoService&amp;methods=sayHello&amp;pid=35044&amp;side=consumer&amp;timestamp=1524794044782, dubbo version: 2.0.0, current host: 192.168.10.44</span><br><span class="line">[27/04/18 09:54:05:005 CST] main  INFO zookeeper.ZookeeperRegistry:  [DUBBO] Notify urls for subscribe url consumer://192.168.10.44/com.alibaba.dubbo.demo.DemoService?application=demo-consumer&amp;category=providers,configurators,routers&amp;check=false&amp;dubbo=2.0.0&amp;interface=com.alibaba.dubbo.demo.DemoService&amp;methods=sayHello&amp;pid=35044&amp;side=consumer&amp;timestamp=1524794044782, urls: [dubbo://192.168.10.44:20880/com.alibaba.dubbo.demo.DemoService?anyhost=true&amp;application=demo-provider&amp;dubbo=2.0.0&amp;generic=false&amp;interface=com.alibaba.dubbo.demo.DemoService&amp;loadbalance=roundrobin&amp;methods=sayHello&amp;owner=william&amp;pid=34925&amp;side=provider&amp;timestamp=1524793792543, empty://192.168.10.44/com.alibaba.dubbo.demo.DemoService?application=demo-consumer&amp;category=configurators&amp;check=false&amp;dubbo=2.0.0&amp;interface=com.alibaba.dubbo.demo.DemoService&amp;methods=sayHello&amp;pid=35044&amp;side=consumer&amp;timestamp=1524794044782, empty://192.168.10.44/com.alibaba.dubbo.demo.DemoService?application=demo-consumer&amp;category=routers&amp;check=false&amp;dubbo=2.0.0&amp;interface=com.alibaba.dubbo.demo.DemoService&amp;methods=sayHello&amp;pid=35044&amp;side=consumer&amp;timestamp=1524794044782], dubbo version: 2.0.0, current host: 192.168.10.44</span><br><span class="line">[27/04/18 09:54:05:005 CST] main  INFO transport.AbstractClient:  [DUBBO] Successed connect to server /192.168.10.44:20880 from NettyClient 192.168.10.44 using dubbo version 2.0.0, channel is NettyChannel [channel=[id: 0x409bf450, /192.168.10.44:64211 =&gt; /192.168.10.44:20880]], dubbo version: 2.0.0, current host: 192.168.10.44</span><br><span class="line">[27/04/18 09:54:05:005 CST] main  INFO transport.AbstractClient:  [DUBBO] Start NettyClient Luxx.local/192.168.10.44 connect to the server /192.168.10.44:20880, dubbo version: 2.0.0, current host: 192.168.10.44</span><br><span class="line">[27/04/18 09:54:05:005 CST] main  INFO config.AbstractConfig:  [DUBBO] Refer dubbo service com.alibaba.dubbo.demo.DemoService from url zookeeper://127.0.0.1:2181/com.alibaba.dubbo.registry.RegistryService?anyhost=true&amp;application=demo-consumer&amp;check=false&amp;dubbo=2.0.0&amp;generic=false&amp;interface=com.alibaba.dubbo.demo.DemoService&amp;loadbalance=roundrobin&amp;methods=sayHello&amp;monitor=dubbo%3A%2F%2F127.0.0.1%3A2181%2Fcom.alibaba.dubbo.registry.RegistryService%3Fapplication%3Ddemo-consumer%26dubbo%3D2.0.0%26pid%3D35044%26protocol%3Dregistry%26refer%3Ddubbo%253D2.0.0%2526interface%253Dcom.alibaba.dubbo.monitor.MonitorService%2526pid%253D35044%2526timestamp%253D1524794045101%26registry%3Dzookeeper%26timestamp%3D1524794045063&amp;owner=william&amp;pid=35044&amp;side=consumer&amp;timestamp=1524794044782, dubbo version: 2.0.0, current host: 192.168.10.44</span><br><span class="line">[27/04/18 09:54:06:006 CST] main  INFO zookeeper.ZookeeperRegistry:  [DUBBO] Register: consumer://192.168.10.44/com.alibaba.dubbo.monitor.MonitorService?category=consumers&amp;check=false&amp;dubbo=2.0.0&amp;interface=com.alibaba.dubbo.monitor.MonitorService&amp;pid=35044&amp;timestamp=1524794045101, dubbo version: 2.0.0, current host: 192.168.10.44</span><br><span class="line">[27/04/18 09:54:06:006 CST] main  INFO zookeeper.ZookeeperRegistry:  [DUBBO] Subscribe: consumer://192.168.10.44/com.alibaba.dubbo.monitor.MonitorService?category=providers,configurators,routers&amp;dubbo=2.0.0&amp;interface=com.alibaba.dubbo.monitor.MonitorService&amp;pid=35044&amp;timestamp=1524794045101, dubbo version: 2.0.0, current host: 192.168.10.44</span><br><span class="line">[27/04/18 09:54:06:006 CST] main  INFO zookeeper.ZookeeperRegistry:  [DUBBO] Notify urls for subscribe url consumer://192.168.10.44/com.alibaba.dubbo.monitor.MonitorService?category=providers,configurators,routers&amp;dubbo=2.0.0&amp;interface=com.alibaba.dubbo.monitor.MonitorService&amp;pid=35044&amp;timestamp=1524794045101, urls: [empty://192.168.10.44/com.alibaba.dubbo.monitor.MonitorService?category=providers&amp;dubbo=2.0.0&amp;interface=com.alibaba.dubbo.monitor.MonitorService&amp;pid=35044&amp;timestamp=1524794045101, empty://192.168.10.44/com.alibaba.dubbo.monitor.MonitorService?category=configurators&amp;dubbo=2.0.0&amp;interface=com.alibaba.dubbo.monitor.MonitorService&amp;pid=35044&amp;timestamp=1524794045101, empty://192.168.10.44/com.alibaba.dubbo.monitor.MonitorService?category=routers&amp;dubbo=2.0.0&amp;interface=com.alibaba.dubbo.monitor.MonitorService&amp;pid=35044&amp;timestamp=1524794045101], dubbo version: 2.0.0, current host: 192.168.10.44</span><br><span class="line">[09:54:06] Hello world 0, response form provider: 192.168.10.44:20880</span><br><span class="line">[09:54:08] Hello world 1, response form provider: 192.168.10.44:20880</span><br><span class="line">[09:54:10] Hello world 2, response form provider: 192.168.10.44:20880</span><br><span class="line">[09:54:12] Hello world 3, response form provider: 192.168.10.44:20880</span><br><span class="line">[09:54:14] Hello world 4, response form provider: 192.168.10.44:20880</span><br><span class="line">[09:54:16] Hello world 5, response form provider: 192.168.10.44:20880</span><br><span class="line">[09:54:18] Hello world 6, response form provider: 192.168.10.44:20880</span><br><span class="line">[09:54:20] Hello world 7, response form provider: 192.168.10.44:20880</span><br><span class="line">[09:54:22] Hello world 8, response form provider: 192.168.10.44:20880</span><br></pre></td></tr></table></figure></p>
+<p>Provider端的console会打印出：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[09:54:06] Hello world 0, request from consumer: /192.168.10.44:64211</span><br><span class="line">[27/04/18 09:54:06:006 CST] DubboServerHandler-192.168.10.44:20880-thread-2  INFO zookeeper.ZookeeperRegistry:  [DUBBO] Register: consumer://192.168.10.44/com.alibaba.dubbo.monitor.MonitorService?category=consumers&amp;check=false&amp;dubbo=2.0.0&amp;interface=com.alibaba.dubbo.monitor.MonitorService&amp;pid=34925&amp;timestamp=1524793793056, dubbo version: 2.0.0, current host: 192.168.10.44</span><br><span class="line">[27/04/18 09:54:06:006 CST] DubboServerHandler-192.168.10.44:20880-thread-2  INFO zookeeper.ZookeeperRegistry:  [DUBBO] Subscribe: consumer://192.168.10.44/com.alibaba.dubbo.monitor.MonitorService?category=providers,configurators,routers&amp;dubbo=2.0.0&amp;interface=com.alibaba.dubbo.monitor.MonitorService&amp;pid=34925&amp;timestamp=1524793793056, dubbo version: 2.0.0, current host: 192.168.10.44</span><br><span class="line">[27/04/18 09:54:06:006 CST] DubboServerHandler-192.168.10.44:20880-thread-2  INFO zookeeper.ZookeeperRegistry:  [DUBBO] Notify urls for subscribe url consumer://192.168.10.44/com.alibaba.dubbo.monitor.MonitorService?category=providers,configurators,routers&amp;dubbo=2.0.0&amp;interface=com.alibaba.dubbo.monitor.MonitorService&amp;pid=34925&amp;timestamp=1524793793056, urls: [empty://192.168.10.44/com.alibaba.dubbo.monitor.MonitorService?category=providers&amp;dubbo=2.0.0&amp;interface=com.alibaba.dubbo.monitor.MonitorService&amp;pid=34925&amp;timestamp=1524793793056, empty://192.168.10.44/com.alibaba.dubbo.monitor.MonitorService?category=configurators&amp;dubbo=2.0.0&amp;interface=com.alibaba.dubbo.monitor.MonitorService&amp;pid=34925&amp;timestamp=1524793793056, empty://192.168.10.44/com.alibaba.dubbo.monitor.MonitorService?category=routers&amp;dubbo=2.0.0&amp;interface=com.alibaba.dubbo.monitor.MonitorService&amp;pid=34925&amp;timestamp=1524793793056], dubbo version: 2.0.0, current host: 192.168.10.44</span><br><span class="line">[09:54:08] Hello world 1, request from consumer: /192.168.10.44:64211</span><br><span class="line">[09:54:10] Hello world 2, request from consumer: /192.168.10.44:64211</span><br><span class="line">[09:54:12] Hello world 3, request from consumer: /192.168.10.44:64211</span><br><span class="line">[09:54:14] Hello world 4, request from consumer: /192.168.10.44:64211</span><br><span class="line">[09:54:16] Hello world 5, request from consumer: /192.168.10.44:64211</span><br><span class="line">[09:54:18] Hello world 6, request from consumer: /192.168.10.44:64211</span><br><span class="line">[09:54:20] Hello world 7, request from consumer: /192.168.10.44:64211</span><br><span class="line">[09:54:22] Hello world 8, request from consumer: /192.168.10.44:64211</span><br></pre></td></tr></table></figure></p>
+<p>至此，我们已经配置好dubbo的调试环境。<br>笔者毕竟能力有限，难免有疏漏，如果，大家发现文章有何错误，请不吝赐教。谢谢！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong>本文作者：</strong>
+      Asion Lu
+    </li>
+    <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://seekheap.com/posts/dubbo/dubbo-src-01-overview-and-debug-environment.html" title="Dubbo源码解剖（一）架构概览与调试环境准备">http://seekheap.com/posts/dubbo/dubbo-src-01-overview-and-debug-environment.html</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong>
+      本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Dubbo/" rel="tag"># Dubbo</a>
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/RPC/" rel="tag"># RPC</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/java/concurrency/java-concurrency-perspective-001-overview.html" rel="next" title="Java Concurrency Perspective Overview (一) </br> Java 并发透视之初窥探（一）">
+                <i class="fa fa-chevron-left"></i> Java Concurrency Perspective Overview (一) </br> Java 并发透视之初窥探（一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<div class="addthis_inline_share_toolbox">
+  <script type = "text/javascript" src = "//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-58d247635b3933ad" async = "async" ></script>
+</div>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/img/avatar.png"
+               alt="Asion Lu" />
+          <p class="site-author-name" itemprop="name">Asion Lu</p>
+           
+              <p class="site-description motion-element" itemprop="description">I'm not a programmer, I'm a technology farmer!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/search-cloud" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/luHsian" target="_blank" title="weibo">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/AsoinLu" target="_blank" title="twitter">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.facebook.com/AsionLu/" target="_blank" title="facebook">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  facebook
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://plus.google.com/u/0/104844052523179213676" target="_blank" title="google-plus">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  google-plus
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="/assets/img/wechat.jpg" target="_blank" title="wechat">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  wechat
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Dubbo源码解剖（一）架构概览与调试环境准备"><span class="nav-number">1.</span> <span class="nav-text">Dubbo源码解剖（一）架构概览与调试环境准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用到的工具"><span class="nav-number">1.0.1.</span> <span class="nav-text">使用到的工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取源码"><span class="nav-number">1.0.2.</span> <span class="nav-text">获取源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#架构简介"><span class="nav-number">1.0.3.</span> <span class="nav-text">架构简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行例子程序"><span class="nav-number">1.0.4.</span> <span class="nav-text">运行例子程序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#找到demo子项目"><span class="nav-number">1.0.4.1.</span> <span class="nav-text">找到demo子项目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行Provider"><span class="nav-number">1.0.4.2.</span> <span class="nav-text">运行Provider</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#启动完Provider，接下来启动Consumer"><span class="nav-number">1.0.4.3.</span> <span class="nav-text">启动完Provider，接下来启动Consumer</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Asion Lu</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("Qjec5zmO0pI0VYyE0pHrp3Eq-gzGzoHsz", "Xln2N2N1XvwKlOHzv511qY41");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
