@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Asion Lu&#39;s Blog</title>
+  <title>Vincent Lu&#39;s Blog</title>
   
   <subtitle>A little bit.</subtitle>
   <link href="/atom.xml" rel="self"/>
@@ -10,7 +10,7 @@
   <id>http://seekheap.com/</id>
   
   <author>
-    <name>Asion Lu</name>
+    <name>Vincent Lu</name>
     
   </author>
   
