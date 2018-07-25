@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://seekheap.com/posts/life/dao-de-jing.html</loc>
+    
+    <lastmod>2018-07-25T11:07:09.910Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://seekheap.com/posts/testing/junit-totulrial-s1-001-index.html</loc>
     
     <lastmod>2018-07-25T11:00:51.665Z</lastmod>
@@ -12,13 +19,6 @@
     <loc>http://seekheap.com/posts/scm/git-flow.html</loc>
     
     <lastmod>2018-07-25T11:00:51.664Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://seekheap.com/posts/life/dao-de-jing.html</loc>
-    
-    <lastmod>2018-07-25T11:00:51.663Z</lastmod>
     
   </url>
   
@@ -65,14 +65,14 @@
   </url>
   
   <url>
-    <loc>http://seekheap.com/categories/index.html</loc>
+    <loc>http://seekheap.com/life/index.html</loc>
     
     <lastmod>2017-08-23T14:12:37.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://seekheap.com/life/index.html</loc>
+    <loc>http://seekheap.com/categories/index.html</loc>
     
     <lastmod>2017-08-23T14:12:37.000Z</lastmod>
     
