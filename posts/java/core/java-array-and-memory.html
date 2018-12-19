@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Java,Architecture," />
+  <meta name="keywords" content="Java,Array," />
 
 
 
@@ -89,20 +89,23 @@
 
 
 
-<meta name="description" content="Java 架构师学习之路 从菜佳娃–&amp;gt;佳娃假购师 分布式架构师知识图谱">
-<meta name="keywords" content="Java,Architecture">
+<meta name="description" content="数组在Java中，数组存储可以存储对象的原始值（int，char，long，…）或引用类型（也可称为指针）。使用“new”创建对象时，会在Heap中分配一个内存空间并返回一个引用。对于数组也是如此，因为数组是Java中的对象。 1. 单维数组 12int a1[ ] = new int[3];int a2[ ] = new int[ ]&amp;#123;3, 6, 7, 4, 9&amp;#125;; int">
+<meta name="keywords" content="Java,Array">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java 架构师知识图谱">
-<meta property="og:url" content="http://seekheap.com/posts/java/java-leaning-road.html">
+<meta property="og:title" content="三言两语@Java 数组">
+<meta property="og:url" content="http://seekheap.com/posts/java/core/java-array-and-memory.html">
 <meta property="og:site_name" content="Vincent Lu&#39;s Blog">
-<meta property="og:description" content="Java 架构师学习之路 从菜佳娃–&amp;gt;佳娃假购师 分布式架构师知识图谱">
+<meta property="og:description" content="数组在Java中，数组存储可以存储对象的原始值（int，char，long，…）或引用类型（也可称为指针）。使用“new”创建对象时，会在Heap中分配一个内存空间并返回一个引用。对于数组也是如此，因为数组是Java中的对象。 1. 单维数组 12int a1[ ] = new int[3];int a2[ ] = new int[ ]&amp;#123;3, 6, 7, 4, 9&amp;#125;; int">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://seekheap.com/assets/img/java/java-leaning-road.svg">
-<meta property="og:updated_time" content="2018-12-19T10:00:49.488Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1753960-8f26e87e538d5758.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1753960-992a756d9053264d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1753960-53031438316a48fe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1753960-739295382dfb5529.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-12-19T09:56:11.515Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java 架构师知识图谱">
-<meta name="twitter:description" content="Java 架构师学习之路 从菜佳娃–&amp;gt;佳娃假购师 分布式架构师知识图谱">
-<meta name="twitter:image" content="http://seekheap.com/assets/img/java/java-leaning-road.svg">
+<meta name="twitter:title" content="三言两语@Java 数组">
+<meta name="twitter:description" content="数组在Java中，数组存储可以存储对象的原始值（int，char，long，…）或引用类型（也可称为指针）。使用“new”创建对象时，会在Heap中分配一个内存空间并返回一个引用。对于数组也是如此，因为数组是Java中的对象。 1. 单维数组 12int a1[ ] = new int[3];int a2[ ] = new int[ ]&amp;#123;3, 6, 7, 4, 9&amp;#125;; int">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1753960-8f26e87e538d5758.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -130,13 +133,13 @@
 
 
 
-  <link rel="canonical" href="http://seekheap.com/posts/java/java-leaning-road.html"/>
+  <link rel="canonical" href="http://seekheap.com/posts/java/core/java-array-and-memory.html"/>
 
 
 
 
 
-  <title> Java 架构师知识图谱 | Vincent Lu's Blog </title>
+  <title> 三言两语@Java 数组 | Vincent Lu's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -295,7 +298,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://seekheap.com/posts/java/java-leaning-road.html">
+    <link itemprop="mainEntityOfPage" href="http://seekheap.com/posts/java/core/java-array-and-memory.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Vincent Lu">
@@ -316,7 +319,7 @@
             
             
               
-                Java 架构师知识图谱
+                三言两语@Java 数组
               
             
           </h1>
@@ -331,7 +334,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-21T21:48:57+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-21T22:17:16+08:00">
                 2017-03-21
               </time>
             
@@ -365,8 +368,8 @@
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/Architecture/" itemprop="url" rel="index">
-                    <span itemprop="name">Architecture</span>
+                  <a href="/categories/Java/Core/" itemprop="url" rel="index">
+                    <span itemprop="name">Core</span>
                   </a>
                 </span>
 
@@ -383,8 +386,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/posts/java/java-leaning-road.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/java/java-leaning-road.html" itemprop="commentCount"></span>
+                <a href="/posts/java/core/java-array-and-memory.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/java/core/java-array-and-memory.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -392,7 +395,7 @@
 
           
           
-             <span id="/posts/java/java-leaning-road.html" class="leancloud_visitors" data-flag-title="Java 架构师知识图谱">
+             <span id="/posts/java/core/java-array-and-memory.html" class="leancloud_visitors" data-flag-title="三言两语@Java 数组">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -421,7 +424,33 @@
       
 
       
-        <h1 id="Java-架构师学习之路-从菜佳娃–-gt-佳娃假购师"><a href="#Java-架构师学习之路-从菜佳娃–-gt-佳娃假购师" class="headerlink" title="Java 架构师学习之路 从菜佳娃–&gt;佳娃假购师 "></a>Java 架构师学习之路 从菜佳娃–&gt;佳娃假购师 </h1><h2 id="分布式架构师知识图谱"><a href="#分布式架构师知识图谱" class="headerlink" title="分布式架构师知识图谱"></a>分布式架构师知识图谱</h2><p><img src="../../assets/img/java/java-leaning-road.svg" alt="java-leaning-road"></p>
+        <h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p>在Java中，数组存储可以存储对象的原始值（int，char，long，…）或引用类型（也可称为指针）。<br>使用“new”创建对象时，会在Heap中分配一个内存空间并返回一个引用。对于数组也是如此，因为数组是Java中的对象。</p>
+<p><strong>1. 单维数组</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int a1[ ] = new int[3];</span><br><span class="line">int a2[ ] = new int[ ]&#123;3, 6, 7, 4, 9&#125;;</span><br></pre></td></tr></table></figure>
+<p>int [] a1 只是3个整数数组的引用。如果创建一个包含10个整数的数组，则它是相同的 - 分配一个数组并返回一个引用。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1753960-8f26e87e538d5758.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="一维数组内存"></p>
+<p><strong>2. 二维数组</strong></p>
+<p>二维数组怎么样？实际上，我们只能在Java中使用一维数组。二维数组只是一维数组的数组。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int[ ][ ] arr = new int[3][ ];</span><br><span class="line">arr[0] = new int[3];</span><br><span class="line">arr[1] = new int[5];</span><br><span class="line">arr[2] = new int[4];</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/1753960-992a756d9053264d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="二维数组内存情况"></p>
+<p>多维数组与二维数组是同样的道理。</p>
+<p><strong>3. 数组位于Java内存中的哪个位置？</strong></p>
+<p>数组也是Java中的对象，因此对象在内存中如何存储，数组也是一样的形式，只是数组分配了一个连续的内存，用来存储相同类型数据。</p>
+<p>我们知道<a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5" target="_blank" rel="external">JVM运行时数据区</a>包括：Heap（堆），JVM Stacks（JVM栈），Native Method Stacks（本地方法栈）等。对于如下的简单示例，让我们看看数组与对象及其引用的存储位置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">class A &#123;</span><br><span class="line">	int x;</span><br><span class="line">	int y;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">...</span><br><span class="line"> </span><br><span class="line">public void m1() &#123;</span><br><span class="line">	int i = 0;</span><br><span class="line">	m2();</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">public void m2() &#123;</span><br><span class="line">	A a2 = new A();</span><br><span class="line">	m3();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void m3() &#123;</span><br><span class="line">	int a3[] = </span><br><span class="line">  new int[]&#123;3, 6, 7, 4, 9&#125;;</span><br><span class="line">	m4();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void m4() &#123;</span><br><span class="line">	A[] a4[] = new A[3];</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>通过上面的声明，如果，我们调用 m1() 看看会发生什么：</p>
+<ol>
+<li>当调用m1时，新栈帧（Frame-1）被推入栈，而局部变量i也在Frame-1中创建。</li>
+<li>然后在m1内调用m2，将另一个新栈帧（Frame-2）推入栈。在m2中，在堆中创建类A的对象，并将引用变量放在 Frame-2 帧中。此时，堆栈和堆如下所示：</li>
+</ol>
+<p><img src="https://upload-images.jianshu.io/upload_images/1753960-53031438316a48fe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="执行到方法 m2 内存情况"></p>
+<ol start="3">
+<li>方法 m2 继续调用 m3，将另一个新栈帧（Frame-3）push 入栈，方法中，创建了 int[ ] 数组，并将引用 a3 返回放在 Frame-3 帧中。</li>
+<li>方法 m3 继续调用 m4，新栈帧（Frame-3）推入栈，方法 m4 中，创建了存储 A 类型的数组：A[ ] a4 = new A[3]; 数组长度为：3；并将引用 a4 返回放在 Frame-4 帧中。此时，堆栈和堆如下所示：</li>
+</ol>
+<p><img src="https://upload-images.jianshu.io/upload_images/1753960-739295382dfb5529.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="方法调用内存示意图"></p>
+<p>数组的处理方式与对象相同，因此数组在内存中的位置是没有太大的区别。<br>三言两语，简单的说了一说数组，不知读者是否有所收获，欢迎留言！</p>
+<p>笔者毕竟能力有限，难免有疏漏，如果，大家发现文章有何错误，请不吝赐教。谢谢！</p>
 
       
     </div>
@@ -450,7 +479,7 @@
     </li>
     <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="http://seekheap.com/posts/java/java-leaning-road.html" title="Java 架构师知识图谱">http://seekheap.com/posts/java/java-leaning-road.html</a>
+      <a href="http://seekheap.com/posts/java/core/java-array-and-memory.html" title="三言两语@Java 数组">http://seekheap.com/posts/java/core/java-array-and-memory.html</a>
     </li>
     <li class="post-copyright-license">
       <strong>版权声明： </strong>
@@ -468,7 +497,7 @@
           
             <a href="/tags/Java/" rel="tag"># Java</a>
           
-            <a href="/tags/Architecture/" rel="tag"># Architecture</a>
+            <a href="/tags/Array/" rel="tag"># Array</a>
           
         </div>
       
@@ -481,8 +510,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/scm/git-flow.html" rel="next" title="Git版本控制与Git Flow工作流程">
-                <i class="fa fa-chevron-left"></i> Git版本控制与Git Flow工作流程
+              <a href="/posts/java/java-leaning-road.html" rel="next" title="Java 架构师知识图谱">
+                <i class="fa fa-chevron-left"></i> Java 架构师知识图谱
               </a>
             
           </div>
@@ -491,8 +520,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/posts/java/core/java-array-and-memory.html" rel="prev" title="三言两语@Java 数组">
-                三言两语@Java 数组 <i class="fa fa-chevron-right"></i>
+              <a href="/posts/java/concurrency/java-concurrency-perspective-001-overview.html" rel="prev" title="Java Concurrency Perspective Overview (一) </br> Java 并发透视之初窥探（一）">
+                Java Concurrency Perspective Overview (一) </br> Java 并发透视之初窥探（一） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -698,7 +727,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-架构师学习之路-从菜佳娃–-gt-佳娃假购师"><span class="nav-number">1.</span> <span class="nav-text">Java 架构师学习之路 从菜佳娃–>佳娃假购师 </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式架构师知识图谱"><span class="nav-number">1.1.</span> <span class="nav-text">分布式架构师知识图谱</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数组"><span class="nav-number">1.</span> <span class="nav-text">数组</span></a></li></ol></div>
             
 
           </div>
@@ -829,9 +858,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'zerotobit';
-      var disqus_identifier = 'posts/java/java-leaning-road.html';
+      var disqus_identifier = 'posts/java/core/java-array-and-memory.html';
 
-      var disqus_title = "Java 架构师知识图谱";
+      var disqus_title = "三言两语@Java 数组";
 
 
       function run_disqus_script(disqus_script) {
